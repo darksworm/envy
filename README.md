@@ -17,4 +17,7 @@ __Usage__
 Envy.get('foo')  # returns 'bar'
 Envy.get('bar', 'FooBar')  # returns 'foo'
 ```
-You can also use Envy to store your DB with set_db() and get_db()
+You can also use Envy to store your DB with set_db(func, args) where 
+`func` is the function or method used to connect to your database and 
+`args` the are arguments that will be passed to `func`, this way the
+database connection will only be initialized once get_db() is called.
