@@ -26,4 +26,9 @@ class Envy(object):
     def get_db():
         if Envy.__db is None:
             Envy.__db = Envy.__db_func(*Envy.__db_args)
+
+        if not Envy.__db.open:
+            Envy.__db = None
+            return Envy.get_db()
+
         return Envy.__db
