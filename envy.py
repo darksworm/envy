@@ -1,13 +1,13 @@
 from configparser import ConfigParser
 
 import sys
+import MySQLdb
 
 
 class Envy(object):
     config = ConfigParser()
     read = False
     __db = None
-    __db_func = None
     __db_args = None
 
     @staticmethod
@@ -18,17 +18,23 @@ class Envy(object):
         return Envy.config.get(section if section else 'SETTINGS', name)
 
     @staticmethod
-    def set_db(func, args):
-        Envy.__db_func = func
+    def set_db_connection_args(args):
         Envy.__db_args = args
 
     @staticmethod
-    def get_db():
-        if Envy.__db is None:
-            Envy.__db = Envy.__db_func(*Envy.__db_args)
-
-        if not Envy.__db.open:
+    def query(sql, args):
+        try:
+            conn = Envy.get_db()
+            cur = conn.cursor()
+            cur.execute(sql, args)
+            return cur
+        except MySQLdb.OperationalError:
             Envy.__db = None
-            return Envy.get_db()
+            return Envy.query(sql, args)
+
+    @staticmethod
+    def get_db() -> MySQLdb.Connection:
+        if Envy.__db is None:
+            Envy.__db = MySQLdb.connect(*Envy.__db_args)
 
         return Envy.__db
