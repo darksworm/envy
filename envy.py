@@ -35,7 +35,7 @@ class Envy(object):
 
     @staticmethod
     def get_db() -> MySQLdb.Connection:
-    if Envy.__db is None:
-        Envy.__db = MySQLdb.connect(*Envy.__db_args)
+        if Envy.__db is None:
+            Envy.__db = MySQLdb.connect(*Envy.__db_args)
 
-    return Envy.__db
+        return Envy.__db
