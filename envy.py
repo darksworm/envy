@@ -29,7 +29,7 @@ class Envy(object):
             cur = conn.cursor()
             cur.execute(sql, args)
             return cur
-        except OperationalError:
+        except (AttributeError, OperationalError):
             Envy.__db = None
             return Envy.query(sql, args)
 
@@ -37,5 +37,6 @@ class Envy(object):
     def get_db() -> MySQLdb.Connection:
         if Envy.__db is None:
             Envy.__db = MySQLdb.connect(*Envy.__db_args)
+            Envy.__db.reconnect()
 
         return Envy.__db
