@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from _mysql_exceptions import OperationalError
 
 import sys
 import MySQLdb
@@ -28,13 +29,13 @@ class Envy(object):
             cur = conn.cursor()
             cur.execute(sql, args)
             return cur
-        except MySQLdb.OperationalError:
+        except OperationalError:
             Envy.__db = None
             return Envy.query(sql, args)
 
     @staticmethod
     def get_db() -> MySQLdb.Connection:
-        if Envy.__db is None:
-            Envy.__db = MySQLdb.connect(*Envy.__db_args)
+    if Envy.__db is None:
+        Envy.__db = MySQLdb.connect(*Envy.__db_args)
 
-        return Envy.__db
+    return Envy.__db
