@@ -35,6 +35,14 @@ class Envy(object):
 
     @staticmethod
     def get_db() -> MySQLdb.Connection:
+        if Envy.__db_args is None:
+            Envy.__db_args = (
+                Envy.get('MYSQL_DATABASE_HOST'),
+                Envy.get('MYSQL_DATABASE_USER'),
+                Envy.get('MYSQL_DATABASE_PASSWORD'),
+                Envy.get('MYSQL_DATABASE_DB')
+            )
+
         if Envy.__db is None:
             Envy.__db = MySQLdb.connect(*Envy.__db_args)
 
